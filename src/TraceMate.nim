@@ -1,5 +1,13 @@
 import base64, json, times, os
 
+
+proc clearTerminal() =
+  if defined(windows):
+    discard execShellCmd("cls")
+  else:
+    discard execShellCmd("clear")
+
+
 type
   LoggerConfig = object
     LoggerName: string
@@ -8,10 +16,8 @@ type
     LoggerText: string
 
 proc processLog(config: LoggerConfig) =
-  let timeDisplay = if config.DisplayTime: 
-                      "Current Time: " & $getTime() 
-                    else: 
-                      ""
+  let timeDisplay = if config.DisplayTime: "Current Time: " & $getTime() else: ""
+  clearTerminal()
   echo(timeDisplay & "[" & config.Level & "] " & config.LoggerName & ": " & config.LoggerText)
 
 when isMainModule:
